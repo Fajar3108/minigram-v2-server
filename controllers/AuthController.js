@@ -1,5 +1,4 @@
 const {User} = require('../models');
-const bcrypt = require('bcrypt');
 const Bcrypt = require('../lib/Bcrypt');
 const { AuthHelper } = require('../helpers');
 
