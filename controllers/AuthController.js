@@ -10,22 +10,22 @@ const Login = async (req, res, next) => {
         message: 'Username not found',
     });
 
-    bcrypt.compare(req.body.password, user.password, (error, match) => {
-        if (error) {
-            res.status(500);
-            next();
-        } else if (match) {
-            res.json({ 
-                status: 200,
-                message: 'Login Success',
-                data: user,
-                token: AuthHelper.generateToken(user),
-            });
-        } else {
-            res.status(403);
-            next(new Error('Password do not match'));
-        }
-    });
+    try {
+        const match = await bcrypt.compare(req.body.password, user.password);
+        if (match) return res.json({ 
+            status: 200,
+            message: 'Login Success',
+            data: user,
+            token: AuthHelper.generateToken(user),
+        });
+        
+        res.status(403);
+        next(new Error('Password do not match'));
+
+    } catch(error) {
+        res.status(500);
+        next(error);
+    }
 };
 
 const Register = async (req, res, next) => {
@@ -41,7 +41,7 @@ const Register = async (req, res, next) => {
         });
     } catch(error) {
         res.status(500);
-        next(new Error(error.message));
+        next(new Error(error));
     }
 }
 
