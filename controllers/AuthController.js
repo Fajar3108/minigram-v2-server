@@ -11,7 +11,7 @@ const Login = async (req, res, next) => {
     });
 
     try {
-        const match = await bcrypt.compare(req.body.password, user.password);
+        const match = await Bcrypt.comparePassword(req.body.password, user.password);
         if (match) return res.json({ 
             status: 200,
             message: 'Login Success',
