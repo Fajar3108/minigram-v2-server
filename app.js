@@ -14,8 +14,10 @@ app.use(express.json())
 
 db.getConnection();
 
-app.get('/', (req, res) => res.json({ message: 'Hello World' }));
+// Routes
+app.use(require('./routes'));
 
+// Error Handler
 app.use(ErrorsHandlerMiddleware.notFoundHandler);
 app.use(ErrorsHandlerMiddleware.errorHandler);
 
