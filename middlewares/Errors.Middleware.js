@@ -1,3 +1,5 @@
+const { NODE_ENV } = require("../config");
+
 const notFoundHandler = (req, res, next) => {
     res.status(404);
     next(new Error(`Request route ${req.originalUrl} does not exist`));
@@ -9,7 +11,7 @@ const errorHandler = (err, req, res, next) => {
         errorCode: code,
         message: err.message,
         requestURL: req.originalUrl,
-        stack: process.env.NODE_ENV === 'production' ? '' : err.stack,
+        stack: NODE_ENV === 'production' ? '' : err.stack,
     });
 };
 

@@ -1,6 +1,7 @@
 const db = require('mongoose');
+const {MONGO_URI} = require('./config');
 
-const URI = process.env.MONGO_URI || 'mongodb://localhost/minigram';
+const URI = MONGO_URI;
 
 const getConnection = () => {
     db.connect(URI)
