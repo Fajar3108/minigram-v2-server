@@ -1,4 +1,5 @@
 const { NODE_ENV } = require("../config");
+const { ResponseHelper } = require("../helpers");
 
 const notFoundHandler = (req, res, next) => {
     res.status(404);
@@ -7,12 +8,11 @@ const notFoundHandler = (req, res, next) => {
 
 const errorHandler = (err, req, res, next) => {
     const code = res.statusCode !== 200 ? res.statusCode : 500;
-    return res.json({
-        errorCode: code,
+    return res.json(ResponseHelper.error({
+        status: code,
         message: err.message,
-        requestURL: req.originalUrl,
         stack: NODE_ENV === 'production' ? '' : err.stack,
-    });
+    }));
 };
 
 module.exports = {
