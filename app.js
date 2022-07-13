@@ -2,7 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
-const ErrorsHandlerMiddleware = require('./middlewares/Errors.Middleware');
+const {ErrorsMiddleware} = require('./middlewares');
 const db = require('./db');
 
 const { PORT } = require('./config');
@@ -18,8 +18,8 @@ db.getConnection();
 app.use(require('./routes'));
 
 // Error Handler
-app.use(ErrorsHandlerMiddleware.notFoundHandler);
-app.use(ErrorsHandlerMiddleware.errorHandler);
+app.use(ErrorsMiddleware.notFoundHandler);
+app.use(ErrorsMiddleware.errorHandler);
 
 const server = app.listen(PORT, () => {
     console.log(`Started application successfully ${server.address().port}`);
