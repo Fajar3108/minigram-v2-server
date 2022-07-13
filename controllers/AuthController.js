@@ -1,5 +1,6 @@
 const {User} = require('../models');
 const bcrypt = require('bcrypt');
+const Bcrypt = require('../lib/Bcrypt');
 const { AuthHelper } = require('../helpers');
 
 const Login = async (req, res, next) => {
@@ -27,6 +28,24 @@ const Login = async (req, res, next) => {
     });
 };
 
+const Register = async (req, res, next) => {
+    try {
+        const hashedPassword = await Bcrypt.hashPassword(req.body.password)
+        const newUser = new User({ username: req.body.username, password: hashedPassword });
+        await newUser.save();
+        res.json({
+            status: 201,
+            message: 'Register Success',
+            data: newUser,
+            token: AuthHelper.generateToken(newUser),
+        });
+    } catch(error) {
+        res.status(500);
+        next(new Error(error.message));
+    }
+}
+
 module.exports = { 
     Login,
+    Register,
 };
