@@ -1,7 +1,6 @@
 const {User} = require('../models');
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const tokenSecret = 'secret';
+const { AuthHelper } = require('../helpers');
 
 const Login = async (req, res, next) => {
     const user = await User.findOne({ username: req.body.username });
@@ -15,7 +14,12 @@ const Login = async (req, res, next) => {
             res.status(500);
             next();
         } else if (match) {
-            res.json({ token: jwt.sign({ data: user }, tokenSecret, { expiresIn: '24h' }) });
+            res.json({ 
+                status: 200,
+                message: 'Login Success',
+                data: user,
+                token: AuthHelper.generateToken(user),
+            });
         } else {
             res.status(403);
             next(new Error('Password do not match'));
