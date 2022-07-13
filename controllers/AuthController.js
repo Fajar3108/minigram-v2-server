@@ -4,10 +4,10 @@ const { AuthHelper } = require('../helpers');
 
 const Login = async (req, res, next) => {
     const user = await User.findOne({ username: req.body.username });
-    if (!user) return res.status(404).json({
-        status: 404,
-        message: 'Username not found',
-    });
+    if (!user) {
+        res.status(404)
+        next(new Error('Username Not Found'));
+    }
 
     try {
         const match = await Bcrypt.comparePassword(req.body.password, user.password);
@@ -20,7 +20,6 @@ const Login = async (req, res, next) => {
         
         res.status(403);
         next(new Error('Password do not match'));
-
     } catch(error) {
         res.status(500);
         next(error);
