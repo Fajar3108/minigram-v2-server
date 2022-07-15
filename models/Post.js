@@ -25,11 +25,7 @@ const PostSchema = mongoose.Schema({
         text: true,
         required: false,
     },
-    video: {
-        type: String,
-        required: false,
-    },
-    images: [{
+    files: [{
         type: String,
     }],
     likes: [
