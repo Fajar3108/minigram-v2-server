@@ -15,6 +15,24 @@ const Index = async (req, res, next) => {
     }
 };
 
+const Store = async (req, res, next) => {
+    try {
+        const { title, description, type, visibility } = req.body;
+        const post = await Post.create({
+            title, description, type, visibility,
+            user_id: req.user._id,
+        });
+        res.json(ResponseHelper.success({
+            status: 201,
+            message: 'Created post successfully',
+            data: post,
+        }));
+    } catch (error) {
+        next(error);
+    }
+};
+
 module.exports = {
     Index,
+    Store,
 };
