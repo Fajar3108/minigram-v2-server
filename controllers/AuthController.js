@@ -31,7 +31,11 @@ const Login = async (req, res, next) => {
 const Register = async (req, res, next) => {
     try {
         const hashedPassword = await Bcrypt.hashPassword(req.body.password)
-        const newUser = new User({ username: req.body.username, password: hashedPassword });
+        const newUser = new User({ 
+            username: req.body.username,
+            password: hashedPassword,
+            name: req.body.name,
+        });
         await newUser.save();
         res.json(ResponseHelper.success({
             status: 201,
