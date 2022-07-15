@@ -1,5 +1,6 @@
 const { ResponseHelper, StorageHelper } = require("../helpers");
 const { Post } = require("../models");
+const fs = require('fs');
 
 const Index = async (req, res, next) => {
     try {
@@ -51,7 +52,26 @@ const Store = async (req, res, next) => {
     }
 };
 
+const Destroy = async (req, res, next) => {
+    try {
+        const post = await Post.findOne({ _id: req.params.id });
+        post.files.forEach((file) => {
+            const splitter = file.split('/');
+            const name = splitter[splitter.length - 1];
+            fs.unlinkSync(`./public/storage/posts/${name}`);
+        });
+        await Post.deleteOne({ _id: req.params.id });
+        res.json(ResponseHelper.success({
+            status: 200,
+            message: 'Post deleted successfully',
+        }));
+    } catch(error) {
+        next(error);
+    }
+}
+
 module.exports = {
     Index,
     Store,
+    Destroy,
 };
